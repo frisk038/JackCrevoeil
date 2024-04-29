@@ -33,8 +33,8 @@ func _physics_process(delta):
 		if collider.collision_layer == 0b10000:
 			collider.seen()
 			return
-
-		interact_hint.text = collider.interact_hint
+		if "interact_hint" in collider :
+			interact_hint.text = collider.interact_hint
 		if interacting:
 			if collider.collision_layer == 0b0100: # Pickable
 				_throw()
@@ -106,7 +106,7 @@ func _get_pointed_object() -> Dictionary:
 	var mousepos = get_viewport().get_mouse_position()
 	var origin = camera.project_ray_origin(mousepos)
 	var end = origin + camera.project_ray_normal(mousepos) * ray_length
-	var query = PhysicsRayQueryParameters3D.create(origin, end, 0b0100 | 0b1000 | 0b10000)
+	var query = PhysicsRayQueryParameters3D.create(origin, end, 0b1 |0b0100 | 0b1000 | 0b10000)
 	query.collide_with_areas = true
 	
 	return get_world_3d().direct_space_state.intersect_ray(query)

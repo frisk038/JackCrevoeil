@@ -1,6 +1,8 @@
 extends CharacterBody3D
 
 @export var player: CharacterBody3D = null
+@export var attack_range: int = 1
+
 var movement_speed: float = 2.5
 var rotation_speed: float = 5.0
 var movement_target_position: Vector3 = Vector3(-3.0, 0.0, 2.0)
@@ -8,8 +10,7 @@ var hiding_distance: float = 10.0
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var head = $Head
-
-var is_chasing: bool = true
+@onready var anim_tree = $AnimationTree
 
 func _ready():
 	# These values need to be adjusted for the actor's speed
@@ -30,28 +31,25 @@ func _physics_process(delta):
 	var target_direction = (player.global_position - transform.origin).normalized()
 	var target_rotation = atan2(target_direction.x, target_direction.z)
 	$Rig.rotation.y = target_rotation
+
+	print(anim_tree.get("parameters/playback").get_current_node())
+	match anim_tree.get("parameters/playback").get_current_node():
+		"Running_A":
+			# Move towards player
+			navigation_agent.set_target_position(player.global_transform.origin)
+			var v = (navigation_agent.get_next_path_position() - transform.origin).normalized() * movement_speed * delta
+			move_and_collide(v)
+		"1H_Melee_Attack_Slice_Diagonal":
+			# TODO do attack stuff
+			pass
+		_:
+			pass
+		
+	anim_tree.set("parameters/conditions/atk", global_position.distance_to(player.global_position) < attack_range)
+	anim_tree.set("parameters/conditions/run", !global_position.distance_to(player.global_position) < attack_range)
 	
-	## If player is looking at the enemy, make it go away
-	# if is_player_looking_at_enemy():
-	# 	return
-
-	# Move towards player
-	navigation_agent.set_target_position(player.global_transform.origin)
-	var v = (navigation_agent.get_next_path_position() - transform.origin).normalized() * movement_speed * delta
-	move_and_collide(v)
-
-func is_player_looking_at_enemy() -> bool:
-	# Get direction from player to enemy
-	var direction_to_enemy = (transform.origin - player.global_transform.origin).normalized()
-
-	# Get direction player is facing
-	var direction_player_facing = -player.head.global_transform.basis.z.normalized()
-
-	# Check if player is looking towards the enemy
-	return direction_to_enemy.dot(direction_player_facing) > 0.5
-
 func seen():
-	# Calculate a random position in a circle around the player
+	#Calculate a random position in a circle around the player
 	var angle = randf_range(180, 360)
 	var offset = Vector3(cos(deg_to_rad(angle)), 0, sin(deg_to_rad(angle))) * hiding_distance
 	global_transform.origin = player.head.global_transform.origin + offset
