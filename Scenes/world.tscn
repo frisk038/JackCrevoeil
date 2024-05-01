@@ -51,7 +51,7 @@ navigation_mesh = SubResource("NavigationMesh_m3q6x")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.35214, -0.0080148, 1.3521)
 
 [node name="pine-fall" parent="NavigationRegion3D" instance=ExtResource("7_6n67u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00481272, -0.0190101, 3.21063)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0339212, 0.0675115, 3.23099)
 
 [node name="pine-fall2" parent="NavigationRegion3D" instance=ExtResource("7_6n67u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.22441, -0.011754, 1.9879)
