@@ -9,7 +9,7 @@ var on_interact: Callable = Callable(func():
 var on_throw: Callable = Callable(func():
 	pass 
 )
-var on_use: Callable = Callable(func():
+var on_use: Callable = Callable(func(Vector3, Array):
 	pass 
 )
 

@@ -32,7 +32,6 @@ func _physics_process(delta):
 	var target_rotation = atan2(target_direction.x, target_direction.z)
 	$Rig.rotation.y = target_rotation
 
-	print(anim_tree.get("parameters/playback").get_current_node())
 	match anim_tree.get("parameters/playback").get_current_node():
 		"Running_A":
 			# Move towards player
@@ -52,4 +51,4 @@ func seen():
 	#Calculate a random position in a circle around the player
 	var angle = randf_range(180, 360)
 	var offset = Vector3(cos(deg_to_rad(angle)), 0, sin(deg_to_rad(angle))) * hiding_distance
-	global_transform.origin = player.head.global_transform.origin + offset
+	global_transform.origin = player.global_transform.origin + offset
